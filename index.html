@@ -13,6 +13,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <title>Dodgeball</title>
         <script type="text/javascript" src="js/three.js"></script>
+        <script type="text/javascript" src="js/FirstPersonControls.js"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <style>
 			canvas {
@@ -129,9 +130,25 @@
 		// add to the scene
 		scene.add(pointLight);
 		
+		var controls = new THREE.FirstPersonControls(camera);
+		controls.movementSpeed = 100;
+		controls.lookSpeed = 0.075;
+		//controls.noFly = true;
+		var clock = new THREE.Clock();
+		
+		// Stop moving around when the window is unfocused
+		$(window).bind('focus', function() {
+			if (controls) controls.freeze = false;
+		});
+		$(window).bind('blur', function() {
+			if (controls) controls.freeze = true;
+		});
+		
 		// Draw
 		function render() {
 			requestAnimationFrame(render);
+			
+			controls.update(clock.getDelta());
 			
 			cube.rotation.x += 0.05;
 			cube.rotation.y += 0.05;
