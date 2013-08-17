@@ -130,14 +130,28 @@
 		scene.add(pointLight);
 		
 		// Draw
-		function render() {
-			requestAnimationFrame(render);
+		function drawLoop(t) {
+			requestAnimationFrame(drawLoop);
 			
-			cube.rotation.x += 0.05;
-			cube.rotation.y += 0.05;
+			//cube.rotation.x = Math.sin(t/1000)*30;
+			//cube.rotation.y = 150;
+			//cube.rotation.z = Math.cos(t/1000)*30;
+			
+			cube.position.x = Math.sin(t/1000)*30;
+			cube.position.y = 0;
+			cube.position.z = Math.cos(t/1000)*30;
+			
+			camera.position.x = Math.sin(t/1000)*300;
+	        camera.position.y = 150;
+	        camera.position.z = Math.cos(t/1000)*300;
+	        
+	        camera.lookAt(scene.position);
+	        
 			renderer.render(scene, camera);
+			
 		}
-		render();
+		
+		drawLoop(new Date().getTime());
 				
         </script>
     </body>
