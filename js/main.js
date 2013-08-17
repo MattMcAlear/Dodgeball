@@ -102,12 +102,18 @@ function startGame(){
 	// add to the scene
 	scene.add(pointLight);	
 	
-	var loader = new THREE.OBJLoader();
-    loader.load( "http://localhost/Dodgeball/objData/glMap.obj", function ( object ) {
-        object.position.y = - 80;
-        scene.add( object );
-    } );
-            
+	// model
+	var loader = new THREE.OBJMTLLoader();
+	loader.addEventListener( 'load', function ( event ) {
+
+		var object = event.content;
+
+		object.position.y = - 80;
+		scene.add( object );
+
+	});
+	loader.load( 'http://localhost/Dodgeball/objData/glMap.obj', 'http://localhost/Dodgeball/objData/glMap.mtl' );
+	            
 	var controls = new THREE.FirstPersonControls(camera);
 	controls.movementSpeed = 100;
 	controls.lookSpeed = 0.1;
