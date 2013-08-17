@@ -101,7 +101,13 @@ function startGame(){
 
 	// add to the scene
 	scene.add(pointLight);	
-
+	
+	var loader = new THREE.OBJLoader();
+    loader.load( "http://localhost/Dodgeball/objData/glMap.obj", function ( object ) {
+        object.position.y = - 80;
+        scene.add( object );
+    } );
+            
 	var controls = new THREE.FirstPersonControls(camera);
 	controls.movementSpeed = 100;
 	controls.lookSpeed = 0.1;
@@ -117,8 +123,8 @@ function startGame(){
 	});
 
 	// Draw
-	function render() {
-		requestAnimationFrame(render);
+	function renderLoop() {
+		requestAnimationFrame(renderLoop);
 		
 		controls.update(clock.getDelta());
 		
@@ -126,5 +132,5 @@ function startGame(){
 		cube.rotation.y += 0.05;
 		renderer.render(scene, camera);
 	}
-	render();
+	renderLoop();
 }
