@@ -106,10 +106,10 @@ function startGame(){
 	var loader = new THREE.OBJMTLLoader();
 	loader.addEventListener( 'load', function ( event ) {
 
-		var object = event.content;
+		modelObject = event.content;
 
-		object.position.y = - 80;
-		scene.add( object );
+		modelObject.position.y = - 80;
+		scene.add( modelObject );
 
 	});
 	loader.load( 'http://localhost/Dodgeball/objData/glMap.obj', 'http://localhost/Dodgeball/objData/glMap.mtl' );
