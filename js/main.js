@@ -96,6 +96,7 @@ function startGame(){
 	pointLight.position.x = 10;
 	pointLight.position.y = 40;
 	pointLight.position.z = 130;
+	
 	// enable shadows for a light
 	//pointLight.castShadow = true;
 
@@ -132,11 +133,23 @@ function startGame(){
 	function renderLoop() {
 		requestAnimationFrame(renderLoop);
 		
-		controls.update(clock.getDelta());
+		var clockDelta = clock.getDelta();
+		controls.update(clockDelta);
+		applyGravity(camera, clockDelta);
 		
 		cube.rotation.x += 0.05;
 		cube.rotation.y += 0.05;
 		renderer.render(scene, camera);
 	}
 	renderLoop();
+}
+
+function applyGravity(object, delta){
+	var floor = 25;
+	if (object.position.y <= floor){
+		return;
+	}
+	
+	var gravityRate = 50;
+	object.translateY((-gravityRate) * delta);
 }
