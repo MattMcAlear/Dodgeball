@@ -125,6 +125,7 @@ function startGame(){
 	var controls = new THREE.FirstPersonControls(camera);
 	controls.movementSpeed = 100;
 	controls.lookSpeed = 0.1;
+	controls.lon = -70; //Make camera look towards initial objects.
 	//controls.noFly = true;
 	var clock = new THREE.Clock();
 	
@@ -157,6 +158,6 @@ function applyGravity(object, delta){
 		return;
 	}
 	
-	var gravityRate = 50;
+	var gravityRate = 100;
 	object.translateY((-gravityRate) * delta);
 }
