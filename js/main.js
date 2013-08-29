@@ -12,6 +12,8 @@ function startGame(){
 	// get the DOM element to attach to
 	// - assume we've got jQuery to hand
 	var $container = $('#container');
+	
+	balls = [];
 
 	// create a WebGL renderer, camera
 	// and a scene
@@ -105,7 +107,7 @@ function startGame(){
 	
 	// model
 	var loader = new THREE.ColladaLoader();
-	loader.load('http://localhost/Dodgeball/worldData/glMap.dae', function (result) {
+	loader.load('worldData/glMap.dae', function (result) {
 	  scene.add(result.scene);
 	});
 	
@@ -141,6 +143,17 @@ function startGame(){
 	function renderLoop() {
 		requestAnimationFrame(renderLoop);
 		
+		if (controls.fire){
+			controls.fire = false;
+			scene.add(fireBall(balls, camera));
+		}
+		
+		var ballsToRemove = moveBalls(balls);
+		for (var i in ballsToRemove){
+			var ball = ballsToRemove[i];
+			scene.remove(ball.obj);
+		}
+		
 		var clockDelta = clock.getDelta();
 		controls.update(clockDelta);
 		applyGravity(camera, clockDelta);
@@ -160,4 +173,45 @@ function applyGravity(object, delta){
 	
 	var gravityRate = 100;
 	object.translateY((-gravityRate) * delta);
+}
+
+function fireBall(balls, camera){
+	var sphereMaterial = new THREE.MeshLambertMaterial(
+	{
+		color: 0x0000CC
+	});
+
+	var radius = 50, segments = 16, rings = 16;
+
+	var sphere = new THREE.Mesh(
+		new THREE.SphereGeometry(radius, segments, rings),
+	sphereMaterial);
+	
+	sphere.position.x = camera.position.x;
+	sphere.position.y = camera.position.y;
+	sphere.position.z = camera.position.z;
+	
+	var vDirection = new THREE.Vector3( 0, 0, -1 );
+	vDirection.applyQuaternion( camera.quaternion );
+	
+	balls.push({obj:sphere, direction:vDirection});
+	
+	return sphere;
+}
+
+function moveBalls(balls){
+	var removeBalls = [];
+	
+	for (var i in balls){
+		var ball = balls[i];
+		
+		ball.obj.translateOnAxis(ball.direction, 5);
+		
+		if (ball.obj.position.y < 0){
+			delete balls[i];
+			removeBalls.push(ball);
+		}
+	}
+	
+	return removeBalls;
 }

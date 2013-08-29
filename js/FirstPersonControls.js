@@ -158,6 +158,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			case 70: /*F*/ this.moveDown = true; break;
 
 			case 81: /*Q*/ this.freeze = !this.freeze; break;
+			
+			case 17: /*Ctrl*/ this.fire = true; break;
 
 		}
 
@@ -181,7 +183,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 			case 82: /*R*/ this.moveUp = false; break;
 			case 70: /*F*/ this.moveDown = false; break;
-
+			
+			case 17: /*Ctrl*/ this.fire = false; break;
 		}
 
 	};
