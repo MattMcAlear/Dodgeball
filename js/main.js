@@ -142,19 +142,19 @@ function startGame(){
 	// Draw
 	function renderLoop() {
 		requestAnimationFrame(renderLoop);
+		var clockDelta = clock.getDelta();
 		
 		if (controls.fire){
 			controls.fire = false;
 			scene.add(fireBall(balls, camera));
 		}
-		
-		var ballsToRemove = moveBalls(balls);
+				
+		var ballsToRemove = moveBalls(balls, clockDelta);
 		for (var i in ballsToRemove){
 			var ball = ballsToRemove[i];
 			scene.remove(ball.obj);
 		}
 		
-		var clockDelta = clock.getDelta();
 		controls.update(clockDelta);
 		applyGravity(camera, clockDelta);
 		
@@ -181,7 +181,7 @@ function fireBall(balls, camera){
 		color: 0x0000CC
 	});
 
-	var radius = 50, segments = 16, rings = 16;
+	var radius = 20, segments = 16, rings = 16;
 
 	var sphere = new THREE.Mesh(
 		new THREE.SphereGeometry(radius, segments, rings),
@@ -194,20 +194,24 @@ function fireBall(balls, camera){
 	var vDirection = new THREE.Vector3( 0, 0, -1 );
 	vDirection.applyQuaternion( camera.quaternion );
 	
-	balls.push({obj:sphere, direction:vDirection});
+	balls.push({obj:sphere, direction:vDirection, age:0});
 	
 	return sphere;
 }
 
-function moveBalls(balls){
+function moveBalls(balls, delta){
 	var removeBalls = [];
+	var ballspeed = 5;
 	
 	for (var i in balls){
 		var ball = balls[i];
 		
-		ball.obj.translateOnAxis(ball.direction, 5);
+		ball.obj.translateOnAxis(ball.direction, ballspeed);
+		//applyGravity(ball.obj, delta);
 		
-		if (ball.obj.position.y < 0){
+		ball.age += delta;
+		
+		if (ball.obj.position.y < 0 || ball.age > 15){
 			delete balls[i];
 			removeBalls.push(ball);
 		}
