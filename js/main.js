@@ -219,3 +219,76 @@ function moveBalls(balls, delta){
 	
 	return removeBalls;
 }
+
+// componentSystem.js
+(function() {
+
+    window.game = {};
+    game.component = {};
+
+    game.createEntity = function(properties, components) {
+
+        var prop;
+        var entity = {};
+
+        for (prop in properties) {
+            entity[prop] = properties[prop];
+        }
+
+        components.forEach(function(component) {
+            for (prop in component) {
+                if (entity.hasOwnProperty(prop)) {
+                    throw "Entity property conflict! " + prop;
+                }
+                entity[prop] = component[prop];
+            }
+        });
+
+        return entity;
+
+    }
+
+}());
+
+// entity.js
+(function() {
+
+    game.component.entity = {
+        distanceTo: function(x, y) {
+            return Math.sqrt(Math.pow(x - this.x, 2) +
+                             Math.pow(y - this.y, 2));
+        }
+    }
+
+}());
+
+// moveable.js
+(function() {
+
+    game.component.moveable = {
+        move: function(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+}());
+
+// damageable.js
+(function() {
+
+    game.component.damageable = {
+        damage: function(amount) {
+            this.hp -= amount;
+        }
+    }
+
+}());
+
+var entity2 = game.createEntity({
+    name: "Entity 2",
+    hp: 30,
+    x: 10,
+    y: 10
+}, [game.component.entity,
+        game.component.moveable]);
