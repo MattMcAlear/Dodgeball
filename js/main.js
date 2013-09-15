@@ -185,7 +185,8 @@ function fireBall(balls, camera){
 
 	var sphere = new THREE.Mesh(
 		new THREE.SphereGeometry(radius, segments, rings),
-	sphereMaterial);
+		sphereMaterial
+	);
 	
 	sphere.position.x = camera.position.x;
 	sphere.position.y = camera.position.y;
@@ -194,7 +195,19 @@ function fireBall(balls, camera){
 	var vDirection = new THREE.Vector3( 0, 0, -1 );
 	vDirection.applyQuaternion( camera.quaternion );
 	
-	balls.push({obj:sphere, direction:vDirection, age:0});
+	var ball = game.createEntity(
+	{
+		name: 		"Ball",
+		obj:		sphere,
+		direction:	vDirection,
+		age:		0
+	}, 
+	[
+		game.component.entity,
+        game.component.takesGravity
+	]);
+	
+	balls.push(ball);
 	
 	return sphere;
 }
@@ -207,7 +220,7 @@ function moveBalls(balls, delta){
 		var ball = balls[i];
 		
 		ball.obj.translateOnAxis(ball.direction, ballspeed);
-		//applyGravity(ball.obj, delta);
+		ball.applyGravity(delta);
 		
 		ball.age += delta;
 		
@@ -274,21 +287,14 @@ function moveBalls(balls, delta){
 
 }());
 
-// damageable.js
-(function() {
 
-    game.component.damageable = {
-        damage: function(amount) {
-            this.hp -= amount;
+(function() {
+	var gravityRate = 50;
+	
+    game.component.takesGravity = {
+        applyGravity: function(delta) {
+			this.obj.translateY((-gravityRate) * delta);
         }
     }
 
 }());
-
-var entity2 = game.createEntity({
-    name: "Entity 2",
-    hp: 30,
-    x: 10,
-    y: 10
-}, [game.component.entity,
-        game.component.moveable]);
