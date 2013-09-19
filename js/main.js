@@ -1,3 +1,8 @@
+'use strict';
+(function(){
+	
+var balls = [], worldObjects = [];
+
 function startGame(){
 	// set the scene size
 	var WIDTH = window.innerWidth,
@@ -13,8 +18,6 @@ function startGame(){
 	// - assume we've got jQuery to hand
 	var $container = $('#container');
 	
-	balls = [];
-
 	// create a WebGL renderer, camera
 	// and a scene
 	var renderer = new THREE.WebGLRenderer();
@@ -77,13 +80,14 @@ function startGame(){
 	sphere.rotation.x = 50;
 	sphere.scale.y = .5;
 
-	var planeGeo = new THREE.PlaneGeometry(400, 200, 10, 10);
+	var planeGeo = new THREE.PlaneGeometry(1000, 1000, 10, 10);
 	var planeMat = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
 	var plane = new THREE.Mesh(planeGeo, planeMat);
 	plane.rotation.x = -Math.PI/2;
 	plane.position.y = -25;
 	plane.receiveShadow = true;
 	scene.add(plane);
+	worldObjects.push(plane);
 
 	// add the sphere to the scene
 	scene.add(sphere);
@@ -222,6 +226,11 @@ function moveBalls(balls, delta){
 		ball.obj.translateOnAxis(ball.direction, ballspeed);
 		ball.applyGravity(delta);
 		
+		for (var i in worldObjects){
+			var worldObject = worldObjects[i];
+			worldObject
+		}
+		
 		ball.age += delta;
 		
 		if (ball.obj.position.y < 0 || ball.age > 15){
@@ -298,3 +307,6 @@ function moveBalls(balls, delta){
     }
 
 }());
+
+$(document).ready(startGame);
+})();
