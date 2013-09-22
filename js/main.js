@@ -104,14 +104,14 @@ function startGame(){
 
 	// add to the scene
 	scene.add(pointLight);	
-	
+	/*
 	// model
 	var loader = new THREE.ColladaLoader();
 	loader.load('worldData/glMap.dae', function (result) {
 	  scene.add(result.scene);
 	});
+	*/
 	
-	/*
 	var loader = new THREE.OBJMTLLoader();
 	loader.addEventListener( 'load', function ( event ) {
 
@@ -121,8 +121,8 @@ function startGame(){
 		scene.add( modelObject );
 
 	});
-	loader.load( 'http://localhost/Dodgeball/objData/glMap.obj', 'http://localhost/Dodgeball/objData/glMap.mtl' );
-	*/
+	loader.load( 'http://localhost/Dodgeball/worldData/glMap.obj', 'http://localhost/Dodgeball/worldData/glMap.mtl' );
+	
 	            
 	var controls = new THREE.FirstPersonControls(camera);
 	controls.movementSpeed = 100;
