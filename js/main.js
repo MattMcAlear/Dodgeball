@@ -218,7 +218,7 @@ function fireBall(balls, camera){
 
 function moveBalls(balls, delta){
 	var removeBalls = [];
-	var ballspeed = 2;
+	var ballspeed = 5;
 	
 	for (var i in balls){
 		var ball = balls[i];
@@ -226,7 +226,7 @@ function moveBalls(balls, delta){
 		ball.obj.translateOnAxis(ball.direction, ballspeed);
 		ball.applyGravity(delta);
 		
-		for (var vertexIndex = 0; vertexIndex < ball.obj.geometry.vertices.length; vertexIndex++)
+		thisBallCheck: for (var vertexIndex = 0; vertexIndex < ball.obj.geometry.vertices.length; vertexIndex++)
 		{       
 			var localVertex = ball.obj.geometry.vertices[vertexIndex].clone();
 			var globalVertex = localVertex.applyMatrix4(ball.obj.matrix);
@@ -238,13 +238,10 @@ function moveBalls(balls, delta){
 			if ( collisions.length > 0 && collisions[0].distance < directionVector.length() )
 			{
 				console.log('collision!');
+				delete balls[i];
+				removeBalls.push(ball);
+				break thisBallCheck;
 			}
-		}	
-		ball.age += delta;
-		
-		if (ball.obj.position.y < 0 || ball.age > 15){
-			delete balls[i];
-			removeBalls.push(ball);
 		}
 	}
 	
