@@ -1,0 +1,44 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl Metal_Steel_Textured_White
+Ka 0.000000 0.000000 0.000000
+Kd 0.749020 0.749020 0.749020
+Ks 0.330000 0.330000 0.330000
+map_Kd glMap/Metal_Steel_Textured_White.jpg
+
+newmtl Metal_Brass_Ceiling
+Ka 0.000000 0.000000 0.000000
+Kd 0.862745 0.650980 0.474510
+Ks 0.330000 0.330000 0.330000
+map_Kd glMap/Metal_Brass_Ceiling.jpg
+
+newmtl FrontColor
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.330000 0.330000 0.330000
+
+newmtl Cladding_Siding_Tan
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.494118 0.372549
+Ks 0.330000 0.330000 0.330000
+map_Kd glMap/Cladding_Siding_Tan.jpg
+
+newmtl Groundcover_Sand_Smooth
+Ka 0.000000 0.000000 0.000000
+Kd 0.713725 0.580392 0.396078
+Ks 0.330000 0.330000 0.330000
+map_Kd glMap/Groundcover_Sand_Smooth.jpg
+
+newmtl Metal_Rusted
+Ka 0.000000 0.000000 0.000000
+Kd 0.721569 0.458824 0.356863
+Ks 0.330000 0.330000 0.330000
+map_Kd glMap/Metal_Rusted.jpg
+
+newmtl ForegroundColor
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.330000 0.330000 0.330000
+
