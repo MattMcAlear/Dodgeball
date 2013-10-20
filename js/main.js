@@ -133,6 +133,18 @@ function startGame(){
 	controls.lookSpeed = 0.1;
 	controls.lon = -70; //Make camera look towards initial objects.
 	//controls.noFly = true;
+	
+	var player = game.createEntity(
+	{
+		name: 		"Player",
+		obj:		camera,
+		crouching:	false
+	}, 
+	[
+		game.component.entity,
+        game.component.takesGravity
+	]);	
+	
 	var clock = new THREE.Clock();
 	
 	// Stop moving around when the window is unfocused
@@ -150,16 +162,16 @@ function startGame(){
 		
 		if (controls.fire){
 			controls.fire = false;
-			scene.add(fireBall(balls, camera));
+			scene.add(fireBall(balls, player.obj));
 		}
 		
 		if (controls.crouch && !crouching){
 			crouching = true;
-			camera.position.y -= 30;
+			player.obj.position.y -= 30;
 		}
 		else if (!controls.crouch && crouching){
 			crouching = false;
-			camera.position.y += 30;
+			player.obj.position.y += 30;
 		}
 		
 		var ballsToRemove = moveBalls(balls, clockDelta);
@@ -169,23 +181,17 @@ function startGame(){
 		}
 		
 		controls.update(clockDelta);
-		applyGravity(camera, clockDelta);
+		
+		var floor = 25;
+		if (player.obj.position.y > floor){
+			player.applyGravity(clockDelta);
+		}
 		
 		cube.rotation.x += 0.05;
 		cube.rotation.y += 0.05;
 		renderer.render(scene, camera);
 	}
 	renderLoop();
-}
-
-function applyGravity(object, delta){
-	var floor = 25;
-	if (object.position.y <= floor){
-		return;
-	}
-	
-	var gravityRate = 100;
-	object.translateY((-gravityRate) * delta);
 }
 
 function fireBall(balls, camera){
