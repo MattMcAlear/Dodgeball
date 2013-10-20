@@ -112,6 +112,7 @@ function startGame(){
 	});
 	*/
 	
+	/*
 	var loader = new THREE.OBJMTLLoader();
 	loader.addEventListener( 'load', function ( event ) {
 
@@ -122,7 +123,16 @@ function startGame(){
 
 	});
 	loader.load( 'http://localhost/Dodgeball/worldData/glMap.obj', 'http://localhost/Dodgeball/worldData/glMap.mtl' );
+	*/
 	
+	
+	loader.load( "http://localhost/Dodgeball/testthreejs.json", function( geometry ) {
+		
+		mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial() );
+		scene.add( mesh );
+		
+	} );
+
 	            
 	var controls = new THREE.FirstPersonControls(camera);
 	controls.movementSpeed = 100;
