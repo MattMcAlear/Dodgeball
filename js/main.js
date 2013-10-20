@@ -156,6 +156,7 @@ function startGame(){
 	});
 
 	var crouching = false;
+	var floor = 25;
 	function renderLoop() {
 		requestAnimationFrame(renderLoop);
 		var clockDelta = clock.getDelta();
@@ -182,7 +183,6 @@ function startGame(){
 		
 		controls.update(clockDelta);
 		
-		var floor = 25;
 		if (player.obj.position.y > floor){
 			player.applyGravity(clockDelta);
 		}
@@ -200,7 +200,7 @@ function fireBall(balls, camera){
 		color: 0x0000CC
 	});
 
-	var radius = 20, segments = 16, rings = 16;
+	var radius = 10, segments = 16, rings = 16;
 
 	var sphere = new THREE.Mesh(
 		new THREE.SphereGeometry(radius, segments, rings),
@@ -233,7 +233,7 @@ function fireBall(balls, camera){
 
 function moveBalls(balls, delta){
 	var removeBalls = [];
-	var ballspeed = 5;
+	var ballspeed = 8;
 	
 	for (var i in balls){
 		var ball = balls[i];
