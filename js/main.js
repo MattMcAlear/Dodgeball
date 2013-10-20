@@ -1,3 +1,8 @@
+'use strict';
+(function(){
+	
+var balls = [], worldObjects = [];
+
 function startGame(){
 	// set the scene size
 	var WIDTH = window.innerWidth,
@@ -13,8 +18,6 @@ function startGame(){
 	// - assume we've got jQuery to hand
 	var $container = $('#container');
 	
-	balls = [];
-
 	// create a WebGL renderer, camera
 	// and a scene
 	var renderer = new THREE.WebGLRenderer();
@@ -77,13 +80,14 @@ function startGame(){
 	sphere.rotation.x = 50;
 	sphere.scale.y = .5;
 
-	var planeGeo = new THREE.PlaneGeometry(400, 200, 10, 10);
+	var planeGeo = new THREE.PlaneGeometry(1000, 1000, 10, 10);
 	var planeMat = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
 	var plane = new THREE.Mesh(planeGeo, planeMat);
 	plane.rotation.x = -Math.PI/2;
 	plane.position.y = -25;
 	plane.receiveShadow = true;
 	scene.add(plane);
+	worldObjects.push(plane);
 
 	// add the sphere to the scene
 	scene.add(sphere);
@@ -139,6 +143,18 @@ function startGame(){
 	controls.lookSpeed = 0.1;
 	controls.lon = -70; //Make camera look towards initial objects.
 	//controls.noFly = true;
+	
+	var player = game.createEntity(
+	{
+		name: 		"Player",
+		obj:		camera,
+		crouching:	false
+	}, 
+	[
+		game.component.entity,
+        game.component.takesGravity
+	]);	
+	
 	var clock = new THREE.Clock();
 	
 	// Stop moving around when the window is unfocused
@@ -149,16 +165,26 @@ function startGame(){
 		if (controls) controls.freeze = true;
 	});
 
-	// Draw
+	var crouching = false;
+	var floor = 25;
 	function renderLoop() {
 		requestAnimationFrame(renderLoop);
 		var clockDelta = clock.getDelta();
 		
 		if (controls.fire){
 			controls.fire = false;
-			scene.add(fireBall(balls, camera));
+			scene.add(fireBall(balls, player.obj));
 		}
-				
+		
+		if (controls.crouch && !crouching){
+			crouching = true;
+			player.obj.position.y -= 30;
+		}
+		else if (!controls.crouch && crouching){
+			crouching = false;
+			player.obj.position.y += 30;
+		}
+		
 		var ballsToRemove = moveBalls(balls, clockDelta);
 		for (var i in ballsToRemove){
 			var ball = ballsToRemove[i];
@@ -166,7 +192,10 @@ function startGame(){
 		}
 		
 		controls.update(clockDelta);
-		applyGravity(camera, clockDelta);
+		
+		if (player.obj.position.y > floor){
+			player.applyGravity(clockDelta);
+		}
 		
 		cube.rotation.x += 0.05;
 		cube.rotation.y += 0.05;
@@ -175,23 +204,13 @@ function startGame(){
 	renderLoop();
 }
 
-function applyGravity(object, delta){
-	var floor = 25;
-	if (object.position.y <= floor){
-		return;
-	}
-	
-	var gravityRate = 100;
-	object.translateY((-gravityRate) * delta);
-}
-
 function fireBall(balls, camera){
 	var sphereMaterial = new THREE.MeshLambertMaterial(
 	{
 		color: 0x0000CC
 	});
 
-	var radius = 20, segments = 16, rings = 16;
+	var radius = 10, segments = 16, rings = 16;
 
 	var sphere = new THREE.Mesh(
 		new THREE.SphereGeometry(radius, segments, rings),
@@ -224,7 +243,7 @@ function fireBall(balls, camera){
 
 function moveBalls(balls, delta){
 	var removeBalls = [];
-	var ballspeed = 5;
+	var ballspeed = 8;
 	
 	for (var i in balls){
 		var ball = balls[i];
@@ -232,11 +251,22 @@ function moveBalls(balls, delta){
 		ball.obj.translateOnAxis(ball.direction, ballspeed);
 		ball.applyGravity(delta);
 		
-		ball.age += delta;
-		
-		if (ball.obj.position.y < 0 || ball.age > 15){
-			delete balls[i];
-			removeBalls.push(ball);
+		thisBallCheck: for (var vertexIndex = 0; vertexIndex < ball.obj.geometry.vertices.length; vertexIndex++)
+		{       
+			var localVertex = ball.obj.geometry.vertices[vertexIndex].clone();
+			var globalVertex = localVertex.applyMatrix4(ball.obj.matrix);
+			var directionVector = globalVertex.sub( ball.obj.position );
+
+			var raycaster = new THREE.Raycaster();
+			raycaster.set(ball.obj.position, directionVector.clone().normalize());
+			var collisions = raycaster.intersectObjects(worldObjects);
+			if ( collisions.length > 0 && collisions[0].distance < directionVector.length() )
+			{
+				console.log('collision!');
+				delete balls[i];
+				removeBalls.push(ball);
+				break thisBallCheck;
+			}
 		}
 	}
 	
@@ -308,3 +338,6 @@ function moveBalls(balls, delta){
     }
 
 }());
+
+$(document).ready(startGame);
+})();
