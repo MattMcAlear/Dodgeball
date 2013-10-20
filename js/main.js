@@ -143,7 +143,7 @@ function startGame(){
 		if (controls) controls.freeze = true;
 	});
 
-	// Draw
+	var crouching = false;
 	function renderLoop() {
 		requestAnimationFrame(renderLoop);
 		var clockDelta = clock.getDelta();
@@ -152,7 +152,16 @@ function startGame(){
 			controls.fire = false;
 			scene.add(fireBall(balls, camera));
 		}
-				
+		
+		if (controls.crouch && !crouching){
+			crouching = true;
+			camera.position.y -= 30;
+		}
+		else if (!controls.crouch && crouching){
+			crouching = false;
+			camera.position.y += 30;
+		}
+		
 		var ballsToRemove = moveBalls(balls, clockDelta);
 		for (var i in ballsToRemove){
 			var ball = ballsToRemove[i];
