@@ -10834,9 +10834,9 @@ THREE.JSONLoader.prototype.parse = function ( json, texturePath ) {
 
 		uvLayer, uv, u, v,
 
-		faces = json.faces,
-		vertices = json.vertices,
-		normals = json.normals,
+		faces = json.embeds["136"].faces,//json.faces,
+		vertices = json.embeds["136"].vertices,//json.vertices,
+		normals = json.embeds["136"].normals,//json.normals,
 		colors = json.colors,
 
 		nUvLayers = 0;
@@ -10860,6 +10860,7 @@ THREE.JSONLoader.prototype.parse = function ( json, texturePath ) {
 		}
 
 		offset = 0;
+		console.log(json.embeds["136"].vertices);
 		zLength = vertices.length;
 
 		while ( offset < zLength ) {

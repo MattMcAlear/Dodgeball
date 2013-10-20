@@ -129,13 +129,18 @@ function startGame(){
 	loader.load( 'http://localhost/Dodgeball/worldData/glMap.obj', 'http://localhost/Dodgeball/worldData/glMap.mtl' );
 	*/
 	
-	
-	loader.load( "http://localhost/Dodgeball/testthreejs.json", function( geometry ) {
-		
-		mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial() );
-		scene.add( mesh );
-		
-	} );
+	var loader = new THREE.JSONLoader();
+ 
+	var createMesh = function( geometry )
+	{
+	    var zmesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial() );
+	    //zmesh.position.set( 0, 0, 0 );
+	    //zmesh.scale.set( 3, 3, 3 );
+	    //zmesh.overdraw = true;
+	    scene.add( zmesh );
+	};
+	 
+	loader.load( "http://localhost/Dodgeball/testthreejs.js", createMesh );
 
 	            
 	var controls = new THREE.FirstPersonControls(camera);
