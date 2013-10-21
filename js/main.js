@@ -140,7 +140,7 @@ function startGame(){
 	    scene.add( zmesh );
 	};
 	 
-	loader.load( "http://localhost/Dodgeball/testthreejs.js", createMesh );
+	loader.load( "testthreejs.js", createMesh );
 
 	            
 	var controls = new THREE.FirstPersonControls(camera);
