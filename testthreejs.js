@@ -16,7 +16,7 @@
             "material": "20130903_200028",
             "position": [0.8715000152587891, 0, 0],
             "rotation": [0, 0, 0],
-            "scale": [1, 1, 1],
+            "scale": [100, 100, 100],
             "visible": true
         }
     },
@@ -44,7 +44,7 @@
     },
     "textures": {
         "Texture_0": {
-            "url": "undefined",
+            "url": "http://localhost/images/ocean.jpeg",
             "repeat": [1, 1],
             "offset": [0, 0],
             "magFilter": "LinearFilter",
@@ -56,7 +56,7 @@
     "transform": {
         "position": [0, 0, 0],
         "rotation": [0, 0, 0],
-        "scale": [1, 1, 1]
+        "scale": [100, 100, 100]
     },
     "defaults": {
         "camera": "",

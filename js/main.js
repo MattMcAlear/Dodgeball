@@ -133,9 +133,9 @@ function startGame(){
  
 	var createMesh = function( geometry )
 	{
-	    var zmesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial() );
-	    //zmesh.position.set( 0, 0, 0 );
-	    //zmesh.scale.set( 3, 3, 3 );
+	    var zmesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
+	    zmesh.position.set( 0, 0, 0 );
+	    zmesh.scale.set( 100, 100, 100 );
 	    //zmesh.overdraw = true;
 	    scene.add( zmesh );
 	};
